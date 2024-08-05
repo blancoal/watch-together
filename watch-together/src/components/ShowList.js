@@ -9,12 +9,15 @@ const ShowList = ({ shows, users, onUpdateStatus }) => {
           <h3 className="text-lg font-semibold">{show.title}</h3>
           <p>{show.type === 'movie' ? <Film className="inline mr-2" /> : <Tv className="inline mr-2" />} {show.type}</p>
           <div className="mt-2">
-            {users.map(user => (
+            {users.map(user => {
+              const dbIndex = show.status.findIndex(s => user.id === s.user);
+              console.log(show, dbIndex);
+              return (
               <div key={user.id} className="flex items-center space-x-2">
                 <span>{user.name}</span>
                 <select 
-                  value={show.status.find(s => s.user === user.id).status}
-                  onChange={(e) => onUpdateStatus(show.id, user.id, e.target.value)}
+                  value={show.status[dbIndex].status}
+                  onChange={(e) => onUpdateStatus(show.id, user.id, dbIndex, e.target.value)}
                   className="border border-gray-300 rounded-md p-2"
                 >
                   <option value="tbd">TBD</option>
@@ -22,7 +25,7 @@ const ShowList = ({ shows, users, onUpdateStatus }) => {
                   <option value="dont">Don't Want to Watch</option>
                 </select>
               </div>
-            ))}
+            );})}
           </div>
         </div>
       ))}

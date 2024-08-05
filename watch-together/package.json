@@ -13,6 +13,7 @@
     "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "firebase": "^10.12.5",
     "lucide-react": "^0.424.0",
     "postcss": "^8.4.40",
     "react": "^18.3.1",

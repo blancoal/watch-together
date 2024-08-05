@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { AlertCircle } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import React, { useState, useEffect } from 'react';
 import AddShowForm from './components/AddShowForm';
 import FilterForm from './components/FilterForm';
 import ShowList from './components/ShowList';
+import { ref, onValue, push, update } from 'firebase/database';
+import { db } from './firebase';
 
 const WatchTogetherApp = () => {
   const [users, setUsers] = useState([
@@ -12,26 +12,7 @@ const WatchTogetherApp = () => {
     { id: 3, name: 'Gabe' }
   ]);
 
-  const [shows, setShows] = useState([
-    {
-      id: 1,
-      title: "The Shawshank Redemption",
-      type: "movie",
-      status: users.map(user => ({ user: user.id, status: 'tbd' }))
-    },
-    {
-      id: 2,
-      title: "Stranger Things",
-      type: "tv",
-      status: users.map(user => ({ user: user.id, status: 'tbd' }))
-    },
-    {
-      id: 3,
-      title: "The Grand Budapest Hotel",
-      type: "movie",
-      status: users.map(user => ({ user: user.id, status: 'tbd' }))
-    }
-  ]);
+  const [shows, setShows] = useState([]);
 
   const [filters, setFilters] = useState({
     users: users.map(user => user.id),
@@ -39,18 +20,37 @@ const WatchTogetherApp = () => {
     type: 'all'
   });
 
+  useEffect(() => {
+    const showsRef = ref(db, 'shows');
+    onValue(showsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setShows(Object.entries(data).map(([key, value]) => ({
+          id: key,
+          ...value
+        })));
+      }
+    });
+  }, []);
+  
   const addShow = (show) => {
-    setShows([...shows, { ...show, status: users.map(user => ({ user: user.id, status: 'tbd' })) }]);
+    const showsRef = ref(db, 'shows');
+    push(showsRef, {
+      title: show.title,
+      type: show.type,
+      status: users.map(user => ({ user: user.id, status: 'tbd' }))
+    });
   };
 
-  const updateShowStatus = (showId, userId, status) => {
-    setShows(shows.map(show => 
-      show.id === showId 
-        ? { ...show, status: show.status.map(s => s.user === userId ? { ...s, status } : s) }
-        : show
-    ));
+  const updateShowStatus = (showId, userId, dbIndex, status) => {
+    const showRef = ref(db, `shows/${showId}/status`);
+    console.log(showRef);
+    update(showRef, {
+      [dbIndex]: { user: userId, status }
+    });
   };
 
+  console.log("shows", shows);
   const filteredShows = shows.filter(show => {
     return (
       (filters.type === 'all' || show.type === filters.type) &&
@@ -61,18 +61,11 @@ const WatchTogetherApp = () => {
       show.status.some(s => filters.users.includes(s.user))
     );
   });
+
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Watch-Together</h1>
       
-      <Alert>
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Welcome to Watch-Together!</AlertTitle>
-        <AlertDescription>
-          Add shows, set your preferences, and find what to watch next with your friends.
-        </AlertDescription>
-      </Alert>
-
       <div className="mt-4 space-y-4">
         <AddShowForm onAddShow={addShow} />
         <FilterForm filters={filters} setFilters={setFilters} users={users} />
