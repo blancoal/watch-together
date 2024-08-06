@@ -32,7 +32,7 @@ const WatchTogetherApp = () => {
       }
     });
   }, []);
-  
+
   const addShow = (show) => {
     const showsRef = ref(db, 'shows');
     push(showsRef, {
@@ -44,32 +44,32 @@ const WatchTogetherApp = () => {
 
   const updateShowStatus = (showId, userId, dbIndex, status) => {
     const showRef = ref(db, `shows/${showId}/status`);
-    console.log(showRef);
     update(showRef, {
       [dbIndex]: { user: userId, status }
     });
   };
 
-  console.log("shows", shows);
-  const filteredShows = shows.filter(show => {
+  const typeFilteredShows = shows.filter(show => {
     return (
-      (filters.type === 'all' || show.type === filters.type) &&
-      (filters.status === 'all' || show.status.every(s => 
-        filters.users.includes(s.user) && 
-        (filters.status === 'all' || s.status === filters.status)
-      )) &&
-      show.status.some(s => filters.users.includes(s.user))
+      (filters.type === 'all' || show.type === filters.type)
     );
   });
+  const filteredShows = typeFilteredShows.filter(show =>
+  (filters.status === 'all' ||
+    filters.users.every(u => show.status.some(s =>
+      s.user === u && s.status === filters.status)
+    )));
+
+  const filteredUsers = users.filter(user => filters.users.includes(user.id));
 
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Watch-Together</h1>
-      
+
       <div className="mt-4 space-y-4">
         <AddShowForm onAddShow={addShow} />
         <FilterForm filters={filters} setFilters={setFilters} users={users} />
-        <ShowList shows={filteredShows} users={users} onUpdateStatus={updateShowStatus} />
+        <ShowList shows={filteredShows} users={filteredUsers} onUpdateStatus={updateShowStatus} />
       </div>
     </div>
   );

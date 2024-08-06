@@ -11,7 +11,6 @@ const ShowList = ({ shows, users, onUpdateStatus }) => {
           <div className="mt-2">
             {users.map(user => {
               const dbIndex = show.status.findIndex(s => user.id === s.user);
-              console.log(show, dbIndex);
               return (
               <div key={user.id} className="flex items-center space-x-2">
                 <span>{user.name}</span>
