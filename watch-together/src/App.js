@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import AddShowForm from './components/AddShowForm';
+import AddUserForm from './components/AddUserForm';
 import FilterForm from './components/FilterForm';
 import ShowList from './components/ShowList';
 import { ref, onValue, push, update } from 'firebase/database';
 import { db } from './firebase';
 
 const WatchTogetherApp = () => {
-  const [users, setUsers] = useState([
-    { id: 1, name: 'Alex' },
-    { id: 2, name: 'Celia' },
-    { id: 3, name: 'Gabe' }
-  ]);
+  const [users, setUsers] = useState([]);
 
   const [shows, setShows] = useState([]);
 
@@ -31,6 +28,16 @@ const WatchTogetherApp = () => {
         })));
       }
     });
+    const usersRef = ref(db, 'users');
+    onValue(usersRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setUsers(Object.entries(data).map(([key, value]) => ({
+          id: key,
+          ...value
+        })));
+      }
+    });
   }, []);
 
   const addShow = (show) => {
@@ -39,6 +46,14 @@ const WatchTogetherApp = () => {
       title: show.title,
       type: show.type,
       status: users.map(user => ({ user: user.id, status: 'tbd' }))
+    });
+  };
+
+  const addUser = (name) => {
+    const usersRef = ref(db, 'users');
+    push(usersRef, {
+      id: users.length+1,
+      name
     });
   };
 
@@ -67,8 +82,9 @@ const WatchTogetherApp = () => {
       <h1 className="text-2xl font-bold mb-4">Watch-Together</h1>
 
       <div className="mt-4 space-y-4">
-        <AddShowForm onAddShow={addShow} />
-        <FilterForm filters={filters} setFilters={setFilters} users={users} />
+      <AddShowForm onAddShow={addShow} />
+      <AddUserForm onAddUser={addUser} />
+      <FilterForm filters={filters} setFilters={setFilters} users={users} />
         <ShowList shows={filteredShows} users={filteredUsers} onUpdateStatus={updateShowStatus} />
       </div>
     </div>
