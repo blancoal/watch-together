@@ -22,6 +22,7 @@ const ShowList = ({ shows, users, onUpdateStatus }) => {
                   <option value="tbd">TBD</option>
                   <option value="want">Want to Watch</option>
                   <option value="dont">Don't Want to Watch</option>
+                  <option value="watched">Watched</option>
                 </select>
               </div>
             );})}

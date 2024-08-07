@@ -45,6 +45,7 @@ const FilterForm = ({ filters, setFilters, users }) => {
           <option value="all">All Statuses</option>
           <option value="want">Want to Watch</option>
           <option value="dont">Don't Want to Watch</option>
+          <option value="watched">Watched</option>
           <option value="tbd">TBD</option>
         </select>
       </div>
