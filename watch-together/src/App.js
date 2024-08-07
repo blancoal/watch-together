@@ -40,6 +40,10 @@ const WatchTogetherApp = () => {
     });
   }, []);
 
+  useEffect(() =>
+    setFilters({ ...filters, users: users.map(user => user.id) }), [users]
+  )
+
   const addShow = (show) => {
     const showsRef = ref(db, 'shows');
     push(showsRef, {
