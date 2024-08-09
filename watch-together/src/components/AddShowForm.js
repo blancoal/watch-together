@@ -14,17 +14,25 @@ const AddShowForm = ({ onAddShow }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center space-x-2">
-      <Input placeholder="Show title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
+      <Input 
+        placeholder="Show title" 
+        value={title} 
+        onChange={(e) => setTitle(e.target.value)} 
+        required 
+        className="flex-grow border-cool-300 focus:border-cool-500 focus:ring-cool-500"
+      />
       <select 
         value={type} 
         onChange={(e) => setType(e.target.value)}
-        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full sm:w-auto px-3 py-2 border border-cool-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cool-500 focus:border-cool-500"
       >
         <option value="movie">Movie</option>
         <option value="tv">TV Show</option>
       </select>
-      <Button type="submit"><Plus className="mr-2 h-4 w-4" /> Add Show</Button>
+      <Button type="submit" className="w-full sm:w-auto bg-gradient-to-r from-cool-400 to-lavender-500 hover:from-cool-500 hover:to-lavender-600 text-white">
+        <Plus className="mr-2 h-4 w-4" /> Add Show
+      </Button>
     </form>
   );
 };

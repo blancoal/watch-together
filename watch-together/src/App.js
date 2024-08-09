@@ -82,14 +82,26 @@ const WatchTogetherApp = () => {
   const filteredUsers = users.filter(user => filters.users.includes(user.id));
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Watch-Together</h1>
+    <div className="min-h-screen bg-gradient-to-br from-cool-100 to-lavender-100">
+      <div className="p-4 max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold mb-6 text-center text-cool-800">Watch-Together</h1>
+        
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <h2 className="text-2xl font-semibold mb-4 text-lavender-700">Add</h2>
+          <AddShowForm onAddShow={addShow} />
+          <AddUserForm onAddUser={addUser} />
 
-      <div className="mt-4 space-y-4">
-      <AddShowForm onAddShow={addShow} />
-      <AddUserForm onAddUser={addUser} />
-      <FilterForm filters={filters} setFilters={setFilters} users={users} />
-        <ShowList shows={filteredShows} users={filteredUsers} onUpdateStatus={updateShowStatus} />
+        </div>
+
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <h2 className="text-2xl font-semibold mb-4 text-lavender-700">Filter Shows</h2>
+          <FilterForm filters={filters} setFilters={setFilters} users={users} />
+        </div>
+
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4 text-lavender-700">Your Watch List</h2>
+          <ShowList shows={filteredShows} users={filteredUsers} onUpdateStatus={updateShowStatus} />
+        </div>
       </div>
     </div>
   );
