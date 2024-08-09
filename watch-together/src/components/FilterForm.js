@@ -12,26 +12,29 @@ const FilterForm = ({ filters, setFilters, users }) => {
   };
 
   return (
-    <div className="space-y-2">
-      <div className="flex flex-wrap items-center gap-2">
-        {users.map(user => (
-          <div key={user.id} className="flex items-center">
-            <Checkbox
-              id={`user-${user.id}`}
-              checked={filters.users.includes(user.id)}
-              onCheckedChange={() => handleUserToggle(user.id)}
-            />
-            <label htmlFor={`user-${user.id}`} className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              {user.name}
-            </label>
-          </div>
-        ))}
+    <div className="space-y-4">
+      <div className="bg-cool-700 p-4 rounded-md">
+        <div className="flex flex-wrap items-center gap-4">
+          {users.map(user => (
+            <div key={user.id} className="flex items-center">
+              <Checkbox
+                id={`user-${user.id}`}
+                checked={filters.users.includes(user.id)}
+                onCheckedChange={() => handleUserToggle(user.id)}
+                className="border-cool-400 text-lavender-300 focus:ring-lavender-400"
+              />
+              <label htmlFor={`user-${user.id}`} className="ml-2 text-sm font-medium text-cool-200">
+                {user.name}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
         <select 
           value={filters.type} 
           onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full sm:w-auto px-3 py-2 border border-cool-600 rounded-md focus:outline-none focus:ring-2 focus:ring-cool-400 focus:border-cool-400 bg-cool-700 text-cool-100"
         >
           <option value="all">All Types</option>
           <option value="movie">Movies</option>
@@ -40,7 +43,7 @@ const FilterForm = ({ filters, setFilters, users }) => {
         <select 
           value={filters.status} 
           onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full sm:w-auto px-3 py-2 border border-cool-600 rounded-md focus:outline-none focus:ring-2 focus:ring-cool-400 focus:border-cool-400 bg-cool-700 text-cool-100"
         >
           <option value="all">All Statuses</option>
           <option value="want">Want to Watch</option>

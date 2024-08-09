@@ -81,25 +81,29 @@ const WatchTogetherApp = () => {
 
   const filteredUsers = users.filter(user => filters.users.includes(user.id));
 
+  // Apply dark mode class to root element
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cool-100 to-lavender-100">
+    <div className="min-h-screen bg-gradient-to-br from-cool-900 to-lavender-900 text-cool-100">
       <div className="p-4 max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-6 text-center text-cool-800">Watch-Together</h1>
+        <h1 className="text-4xl font-bold mb-6 text-center text-cool-100">Watch-Together</h1>
         
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-          <h2 className="text-2xl font-semibold mb-4 text-lavender-700">Add</h2>
+        <div className="bg-cool-800 rounded-lg shadow-lg p-6 mb-6">
+          <h2 className="text-2xl font-semibold mb-4 text-lavender-300">Add</h2>
           <AddShowForm onAddShow={addShow} />
           <AddUserForm onAddUser={addUser} />
-
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-          <h2 className="text-2xl font-semibold mb-4 text-lavender-700">Filter Shows</h2>
+        <div className="bg-cool-800 rounded-lg shadow-lg p-6 mb-6">
+          <h2 className="text-2xl font-semibold mb-4 text-lavender-300">Filter Shows</h2>
           <FilterForm filters={filters} setFilters={setFilters} users={users} />
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4 text-lavender-700">Your Watch List</h2>
+        <div className="bg-cool-800 rounded-lg shadow-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4 text-lavender-300">Your Watch List</h2>
           <ShowList shows={filteredShows} users={filteredUsers} onUpdateStatus={updateShowStatus} />
         </div>
       </div>
