@@ -92,18 +92,15 @@ const WatchTogetherApp = () => {
         <h1 className="text-4xl font-bold mb-6 text-center text-cool-100">Watch-Together</h1>
         
         <div className="bg-cool-800 rounded-lg shadow-lg p-6 mb-6">
-          <h2 className="text-2xl font-semibold mb-4 text-lavender-300">Add</h2>
           <AddShowForm onAddShow={addShow} />
           <AddUserForm onAddUser={addUser} />
         </div>
 
         <div className="bg-cool-800 rounded-lg shadow-lg p-6 mb-6">
-          <h2 className="text-2xl font-semibold mb-4 text-lavender-300">Filter Shows</h2>
           <FilterForm filters={filters} setFilters={setFilters} users={users} />
         </div>
 
         <div className="bg-cool-800 rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4 text-lavender-300">Your Watch List</h2>
           <ShowList shows={filteredShows} users={filteredUsers} onUpdateStatus={updateShowStatus} />
         </div>
       </div>
