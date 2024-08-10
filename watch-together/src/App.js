@@ -3,6 +3,7 @@ import AddShowForm from './components/AddShowForm';
 import AddUserForm from './components/AddUserForm';
 import FilterForm from './components/FilterForm';
 import ShowList from './components/ShowList';
+import CollapsibleSection from './components/CollapsibleSection';
 import { ref, onValue, push, update } from 'firebase/database';
 import { db } from './firebase';
 
@@ -90,13 +91,16 @@ const WatchTogetherApp = () => {
     <div className="min-h-screen bg-gradient-to-br from-cool-900 to-lavender-900 text-cool-100">
       <div className="p-4 max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 text-center text-cool-100">Watch-Together</h1>
-        
-        <div className="bg-cool-800 rounded-lg shadow-lg p-6 mb-6">
-          <AddShowForm onAddShow={addShow} />
-          <AddUserForm onAddUser={addUser} />
-        </div>
+
+        <CollapsibleSection title="Add New">
+          <div className="bg-cool-800 rounded-lg shadow-lg p-6 mb-6">
+            <AddShowForm onAddShow={addShow} />
+            <AddUserForm onAddUser={addUser} />
+          </div>
+        </CollapsibleSection>
 
         <div className="bg-cool-800 rounded-lg shadow-lg p-6 mb-6">
+          <h3 className="text-2xl font-semibold text-lavender-300">Filters</h3>
           <FilterForm filters={filters} setFilters={setFilters} users={users} />
         </div>
 
