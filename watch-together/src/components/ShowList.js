@@ -21,7 +21,7 @@ const ShowList = ({ shows, users, onUpdateStatus }) => {
                 <span className="text-cool-200">{user.name}</span>
                 <select 
                   value={show.status[dbIndex].status}
-                  onChange={(e) => onUpdateStatus(show.id, user.id, e.target.value)}
+                  onChange={(e) => onUpdateStatus(show.id, user.id, dbIndex, e.target.value)}
                   className="px-2 py-1 border border-cool-600 rounded-md focus:outline-none focus:ring-2 focus:ring-cool-400 focus:border-cool-400 bg-cool-800 text-cool-100"
                 >
                   <option value="tbd">TBD</option>
