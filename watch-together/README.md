@@ -1,5 +1,9 @@
 TODOS
-OOPS: implemented an admin sdk version that needs a backend. need to host that somewhere to get this setup to work. Also need to do this:
+OOPS: implemented an admin sdk version that needs a backend. may be more efficient to just hard code the credentials in the front end (not secure) or need to host the backend somewhere to get this setup to work. 
+
+To do that less secure could just provide the credentials in REACT_APP env vars, but might be easier to just hard code in the code for now.
+
+To do backend, also need to do this:
 
 Certainly! Hosting your site as a GitHub Page while using Firebase and environment variables requires a slightly different approach. Here's how you can set this up:
 
