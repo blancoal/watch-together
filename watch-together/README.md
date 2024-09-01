@@ -1,3 +1,122 @@
+TODOS
+OOPS: implemented an admin sdk version that needs a backend. need to host that somewhere to get this setup to work. Also need to do this:
+
+Certainly! Hosting your site as a GitHub Page while using Firebase and environment variables requires a slightly different approach. Here's how you can set this up:
+
+1. GitHub Actions for Build and Deploy:
+   We'll use GitHub Actions to build your React app and deploy it to GitHub Pages. This allows us to inject environment variables during the build process.
+
+2. GitHub Secrets for Environment Variables:
+   We'll store sensitive information like Firebase config in GitHub Secrets.
+
+Here's a step-by-step guide:
+
+
+
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Set this to your default branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Set this to your preferred Node.js version
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build
+        env:
+          REACT_APP_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          REACT_APP_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          REACT_APP_BACKEND_URL: ${{ secrets.BACKEND_URL }}
+        run: npm run build
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages  # The branch the action should deploy to.
+          folder: build  # The folder the action should deploy.
+
+```
+
+Now, let's go through the setup process:
+
+1. Create GitHub Secrets:
+   - Go to your GitHub repository
+   - Click on "Settings" > "Secrets" > "New repository secret"
+   - Add the following secrets:
+     - FIREBASE_API_KEY
+     - FIREBASE_AUTH_DOMAIN
+     - FIREBASE_PROJECT_ID
+     - FIREBASE_STORAGE_BUCKET
+     - FIREBASE_MESSAGING_SENDER_ID
+     - FIREBASE_APP_ID
+     - BACKEND_URL (if you're using a separate backend)
+
+2. Create the GitHub Actions workflow file:
+   - Create a file at `.github/workflows/deploy.yml` in your repository
+   - Copy the content from the artifact above into this file
+
+3. Update your React app to use environment variables:
+   In your Firebase configuration file (e.g., `src/firebase.js`):
+
+   ```javascript
+   const firebaseConfig = {
+     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+     authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+     projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+     storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+     messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+     appId: process.env.REACT_APP_FIREBASE_APP_ID
+   };
+   ```
+
+4. Update `package.json`:
+   Ensure you have a build script:
+   ```json
+   "scripts": {
+     "build": "react-scripts build",
+     // ... other scripts
+   }
+   ```
+
+5. Configure GitHub Pages:
+   - Go to your repository settings
+   - Scroll down to the "GitHub Pages" section
+   - Set the source to the `gh-pages` branch
+
+6. Push your changes:
+   When you push to the `main` branch (or whatever branch you specified in the workflow), GitHub Actions will automatically build your app and deploy it to GitHub Pages.
+
+Important notes:
+- Your React app will be a static site on GitHub Pages. If you're using a backend (like for Firebase Admin SDK operations), you'll need to host that separately and update the BACKEND_URL secret accordingly.
+- Ensure your Firebase project is set up to allow requests from your GitHub Pages domain (usually `https://username.github.io` or your custom domain).
+- If you're using React Router, you might need to configure it for GitHub Pages (using HashRouter or adding a 404.html redirect).
+
+After setting this up:
+1. Push your changes to GitHub
+2. Go to the "Actions" tab in your repository to monitor the workflow
+3. Once completed, your site should be live at your GitHub Pages URL
+
+Would you like me to explain any part of this process in more detail?
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
