@@ -10,10 +10,10 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const database = getDatabase(app);
+const auth = getAuth(app);
+const database = getDatabase(app);
 
-export async function initializeAuth() {
+const initializeAuth = async () => {
   try {
     const response = await
       fetch(`${process.env.REACT_APP_BACKEND_URL}/api/token`)
@@ -24,4 +24,6 @@ export async function initializeAuth() {
   } catch (error) {
     console.error('Authentication failed:', error);
   }
-}
+};
+
+export { database, initializeAuth, auth };

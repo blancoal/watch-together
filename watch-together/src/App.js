@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from './firebase';
+import Login from './components/Login';
 import AddShowForm from './components/AddShowForm';
 import AddUserForm from './components/AddUserForm';
 import FilterForm from './components/FilterForm';
@@ -7,14 +10,22 @@ import CollapsibleSection from './components/CollapsibleSection';
 import { ref, onValue, push, update } from 'firebase/database';
 import { database, initializeAuth } from './firebase';
 
+const userLoginFF = true;
+const serverAdminAuthFF = false;
+
 const WatchTogetherApp = () => {
+  const [user, loading, error] = useAuthState(auth);
+  console.log({user, loading, error});
+
   const authError = useRef(undefined);
 
   useEffect(() => {
-    try {
-      initializeAuth();
-      authError.current = undefined;
-    } catch (e) { authError.current = e; }
+    if (serverAdminAuthFF) {
+      try {
+        initializeAuth();
+        authError.current = undefined;
+      } catch (e) { authError.current = e; }
+    }
   }, []);
 
   const [users, setUsers] = useState([]);
@@ -28,7 +39,7 @@ const WatchTogetherApp = () => {
   });
 
   useEffect(() => {
-    if (!authError.current) {
+    if (!authError.current || user) {
       const showsRef = ref(database, 'shows');
       onValue(showsRef, (snapshot) => {
         const data = snapshot.val();
@@ -50,7 +61,7 @@ const WatchTogetherApp = () => {
         }
       });
     }
-  }, [authError]);
+  }, [authError, user]);
 
   useEffect(() => {
     if (!authError.current) {
@@ -101,14 +112,27 @@ const WatchTogetherApp = () => {
     document.documentElement.classList.add('dark');
   }, []);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  if (!user) {
+    return <Login />;
+  }
+
   return (
     <div>
       {authError.current}
       <div className="min-h-screen bg-gradient-to-br from-cool-900 to-lavender-900 text-cool-100">
         <div className="p-4 max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-6 text-center text-cool-100">Watch-Together</h1>
-
-
+          {userLoginFF &&
+            <>
+              <h1>Welcome, {user.email}!</h1>
+              <button onClick={() => auth.signOut()}>Sign Out</button>
+            </>}
           <CollapsibleSection title="Add New">
             <div className="bg-cool-800 rounded-lg shadow-lg p-6 mb-6">
               <AddShowForm onAddShow={addShow} />
